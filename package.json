@@ -1,0 +1,34 @@
+{
+  "name": "mathjax-pandoc-filter",
+  "version": "0.1.0",
+  "description": "Pandoc filter to turn LaTeX math into embedded SVG",
+  "main": "filter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lierdakil/mathjax-pandoc-filter"
+  },
+  "keywords": [
+    "pandoc",
+    "math",
+    "svg",
+    "TeX",
+    "markdown",
+    "html"
+  ],
+  "author": "Nikolay Yakimov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lierdakil/mathjax-pandoc-filter/issues"
+  },
+  "homepage": "https://github.com/lierdakil/mathjax-pandoc-filter",
+  "dependencies": {
+      "MathJax-node":"https://github.com/mathjax/MathJax-node/tarball/master",
+      "promise": "latest"
+  },
+  "bin": {
+      "mathjax-pandoc-filter": "./filter.js"
+  }
+}

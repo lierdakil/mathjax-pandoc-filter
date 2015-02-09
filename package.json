@@ -26,13 +26,15 @@
   "homepage": "https://github.com/lierdakil/mathjax-pandoc-filter",
   "dependencies": {
       "MathJax-node":"https://github.com/mathjax/MathJax-node/tarball/master",
-      "promise": "latest",
+      "promise": "latest"
+  },
+  "devDependencies": {
       "coffee-script": "latest"
   },
   "bin": {
       "mathjax-pandoc-filter": "filter-shim.js"
   },
   "scripts": {
-      "postinstall":"coffee -bco lib/ src/"
+      "prepublish":"coffee -bco lib/ src/"
   }
 }

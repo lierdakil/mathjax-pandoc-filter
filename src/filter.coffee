@@ -21,9 +21,10 @@ walkTree = (node) ->
   if node.t=="Math"
     inline=node.c[0].t!='DisplayMath'
     tex=node.c[1]
+    wrap = (s) -> "<p>"+s+"</p>"
     tex2svg(tex,inline).then (svg) ->
       t:"RawInline"
-      c:["html",svg.svg]
+      c:["html",if inline then svg.svg else wrap(svg.svg)]
   else
     if node.c? and typeof node.c is 'object'
       walkChildren(node.c).then (c) ->

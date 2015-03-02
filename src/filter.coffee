@@ -1,48 +1,37 @@
+wait = require('wait.for')
+pandoc = require('pandoc-filter')
 mjAPI = require("MathJax-node/lib/mj-single.js")
-Promise = require('promise')
-
-tex2svg = (mn,inline) ->
-  new Promise (resolve) ->
-    mjAPI.typeset
-      math: mn
-      format: if inline then "inline-TeX" else "TeX",
-      svg:true
-      speakText: false
-      linebreaks: false
-    , (data) ->
-      if (!data.errors)
-        resolve(data)
-
-walkChildren = (children) ->
-  Promise.all children.map (childnode) ->
-    walkTree(childnode)
-
-walkTree = (node) ->
-  if node.t=="Math"
-    inline=node.c[0].t!='DisplayMath'
-    tex=node.c[1]
-    wrap = (s) -> "<p>"+s+"</p>"
-    tex2svg(tex,inline).then (svg) ->
-      t:"RawInline"
-      c:["html",if inline then svg.svg else wrap(svg.svg)]
-  else
-    if node.c? and typeof node.c is 'object'
-      walkChildren(node.c).then (c) ->
-        t: node.t
-        c: c
-    else
-      Promise.resolve(node)
+get_stdin = require('get-stdin')
 
 mjAPI.start()
 
-process.stdin.setEncoding('utf8')
-jsondata = ""
-process.stdin.on 'data', (data) ->
-  jsondata+=data
-process.stdin.on 'end', () ->
-  data=JSON.parse(jsondata)
-  if data?
-    walkChildren data[1]
-    .then (trans) ->
-      data[1]=trans
-      console.log(JSON.stringify(data))
+tex2svg = (mn,inline,callback) ->
+  mjAPI.typeset
+    math: mn
+    format: if inline then "inline-TeX" else "TeX",
+    svg:true
+    speakText: false
+    linebreaks: false
+  , (data) ->
+    if data.error
+      callback(data.error,null)
+    else
+      callback(null,data.svg)
+
+action = (type,value,format,meta) ->
+  if type == 'Math'
+    inline = value[0].t!='DisplayMath'
+    tex = value[1]
+    wrap = (s) -> "<p>"+s+"</p>"
+    svg = wait.for tex2svg,tex,inline
+    pandoc.RawInline "html",if inline then svg else wrap(svg)
+
+
+toJSONFilter = (json) ->
+  data = JSON.parse(json)
+  format = if process.argv.length > 2 then process.argv[2] else ''
+  output = pandoc.filter data, action, format
+  process.stdout.write JSON.stringify output
+
+get_stdin (json) ->
+  wait.launchFiber toJSONFilter, json

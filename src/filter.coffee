@@ -13,10 +13,7 @@ tex2svg = (mn,inline,callback) ->
     speakText: false
     linebreaks: false
   , (data) ->
-    if data.error
-      callback(data.error,null)
-    else
-      callback(null,data.svg)
+    callback(data.error,data.svg)
 
 action = (type,value,format,meta) ->
   if type == 'Math'

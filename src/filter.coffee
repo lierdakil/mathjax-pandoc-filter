@@ -1,6 +1,6 @@
 wait = require('wait.for')
 pandoc = require('pandoc-filter')
-mjAPI = require("MathJax-node/lib/mj-single.js")
+mjAPI = require("mathjax-node/lib/mj-single.js")
 get_stdin = require('get-stdin')
 
 mjAPI.start()

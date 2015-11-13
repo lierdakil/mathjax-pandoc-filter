@@ -25,10 +25,10 @@
   },
   "homepage": "https://github.com/lierdakil/mathjax-pandoc-filter",
   "dependencies": {
-      "MathJax-node":"https://github.com/mathjax/MathJax-node/tarball/master",
-      "wait.for": "latest",
-      "get-stdin": "latest",
-      "pandoc-filter": "latest"
+      "mathjax-node":"~0.4",
+      "wait.for": "~0.6",
+      "get-stdin": "^3.0.0",
+      "pandoc-filter": "~0.1"
   },
   "devDependencies": {
       "coffee-script": "latest"

@@ -4,7 +4,7 @@
   "description": "Pandoc filter to turn LaTeX math into embedded SVG",
   "main": "./lib/filter",
   "scripts": {
-    "prepublish": "coffee -bco lib/ src/"
+    "prepare": "tsc --project ."
   },
   "repository": {
     "type": "git",
@@ -25,15 +25,15 @@
   },
   "homepage": "https://github.com/lierdakil/mathjax-pandoc-filter",
   "dependencies": {
-    "mathjax-node": "~0.4",
-    "wait.for": "~0.6",
-    "get-stdin": "^3.0.0",
-    "pandoc-filter": "~0.1"
+    "mathjax-node": "^2.1.1",
+    "pandoc-filter": "git+https://github.com/lierdakil/pandoc-filter-node.git"
   },
   "devDependencies": {
-    "coffee-script": "^1.9"
+    "typescript": "~2.9",
+    "prettier": "latest"
   },
   "bin": {
-    "mathjax-pandoc-filter": "filter-shim.js"
+    "mathjax-pandoc-filter": "filter-shim.js",
+    "mathjax-pandoc-filter-img": "filter-shim-img.js"
   }
 }

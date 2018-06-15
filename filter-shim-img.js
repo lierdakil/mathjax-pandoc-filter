@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require('./lib/filter.js').run(false)
+require('./lib/filter.js')({ inlineSVG: false })

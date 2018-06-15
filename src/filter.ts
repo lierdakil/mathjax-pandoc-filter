@@ -25,13 +25,17 @@ function wrap(s: string) {
   return `<p>${s}</p>`
 }
 
-function action(inlineSVG: boolean): pandoc.FilterAction {
+interface Config {
+  inlineSVG: boolean
+}
+
+function action(config: Config): pandoc.FilterAction {
   return async function(elt) {
     if (elt.t === 'Math') {
       const inline = elt.c[0].t != 'DisplayMath'
       const tex = elt.c[1]
       const svg = await tex2svg(tex, inline)
-      if (inlineSVG) {
+      if (config.inlineSVG) {
         return pandoc.RawInline('html', inline ? svg : wrap(svg))
       } else {
         const src =
@@ -45,6 +49,6 @@ function action(inlineSVG: boolean): pandoc.FilterAction {
   }
 }
 
-export function run(inlineSVG: boolean) {
-  pandoc.stdio(action(inlineSVG))
+export = function(config: Config) {
+  pandoc.stdio(action(config))
 }

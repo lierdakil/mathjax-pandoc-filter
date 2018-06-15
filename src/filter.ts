@@ -1,24 +1,6 @@
 import * as pandoc from 'pandoc-filter'
 const mjAPI: any = require('mathjax-node')
 
-mjAPI.config({
-  MathJax: {
-    jax: ['input/TeX', `output/SVG`],
-    extensions: [],
-    TeX: {
-      extensions: [
-        'AMSmath.js',
-        'AMSsymbols.js',
-        'noErrors.js',
-        'noUndefined.js',
-      ],
-      equationNumbers: {
-        autoNumber: 'AMS',
-        useLabelIds: false,
-      },
-    },
-  },
-})
 mjAPI.start()
 
 function tex2svg(mn: string, inline: boolean) {

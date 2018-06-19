@@ -34,7 +34,6 @@
     "typescript": "~2.9"
   },
   "bin": {
-    "mathjax-pandoc-filter": "filter-shim.js",
-    "mathjax-pandoc-filter-img": "filter-shim-img.js"
+    "mathjax-pandoc-filter": "filter-shim.js"
   }
 }

@@ -1,4 +1,4 @@
-import * as pandoc from 'pandoc-filter'
+import * as pandoc from 'pandoc-filter-promisified'
 const mjAPI: any = require('mathjax-node')
 
 mjAPI.start()

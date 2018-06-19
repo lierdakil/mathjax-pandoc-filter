@@ -26,11 +26,12 @@
   "homepage": "https://github.com/lierdakil/mathjax-pandoc-filter",
   "dependencies": {
     "mathjax-node": "^2.1.1",
-    "pandoc-filter": "git+https://github.com/lierdakil/pandoc-filter-node.git"
+    "pandoc-filter-promisified": "^0.1.0"
   },
   "devDependencies": {
-    "typescript": "~2.9",
-    "prettier": "latest"
+    "@types/node": "^10.3.4",
+    "prettier": "latest",
+    "typescript": "~2.9"
   },
   "bin": {
     "mathjax-pandoc-filter": "filter-shim.js",

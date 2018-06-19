@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require('./lib/filter.js');
+require('./lib/filter.js')()

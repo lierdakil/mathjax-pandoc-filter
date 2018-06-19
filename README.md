@@ -14,10 +14,30 @@ Or, if you have npm bin in PATH, just
 echo '$$a_i$$' | pandoc --filter mathjax-pandoc-filter
 ```
 
-If you need to use `img` tags instead of inline SVG, use `mathjax-pandoc-filter-img` binary:
+## Configuration
+
+The filter will check Pandoc metadata for the following boolean options:
+
+-   `mathjax.centerDisplayMath`
+
+    Will add `text-align: center` style to display math paragraphs
+
+-   `mathjax.noInlineSVG`
+
+    Will render math as `img` tags instead of inline `svg`
+
+Example:
 
 ```bash
-echo '$$a_i$$' | pandoc --filter mathjax-pandoc-filter-img
+echo '$$a_i$$' | pandoc --filter mathjax-pandoc-filter -Mmathjax.centerDisplayMath -Mmathjax.noInlineSVG
 ```
 
-Bear in mind that math text baseline will likely be somewhat misaligned.
+You can also specify this options in Markdown document's YAML header:
+```markdown
+---
+mathjax.centerDisplayMath: true
+mathjax.noInlineSVG: true
+---
+
+$$a_i$$
+```

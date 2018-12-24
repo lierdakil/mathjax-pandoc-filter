@@ -1,24 +1,63 @@
 import * as pandoc from 'pandoc-filter-promisified'
 const mjAPI: any = require('mathjax-node')
+const mjState = {}
+let mjInitialized = false
 
-mjAPI.start()
+async function meta2val(v: pandoc.MetaValue): Promise<{}> {
+  switch (v.t) {
+    case 'MetaMap':
+      return metaMap2obj(v.c)
+    case 'MetaList':
+      return Promise.all(v.c.map(meta2val))
+    case 'MetaBool':
+    case 'MetaString':
+      return v.c
+    case 'MetaInlines':
+    case 'MetaBlocks':
+      return pandoc.stringify(v.c as any)
+    default:
+      throw new Error(`Unknown meta type ${JSON.stringify(v)}`)
+  }
+}
 
-function tex2svg(mn: string, inline: boolean) {
-  return new Promise<string>(function(resolve, reject) {
-    mjAPI.typeset(
-      {
-        math: mn,
-        format: inline ? 'inline-TeX' : 'TeX',
-        svg: true,
-        speakText: false,
-        linebreaks: false,
-      },
-      function(data: any) {
-        if (data.error) reject(data.error)
-        else resolve(data.svg)
-      },
-    )
-  })
+async function metaMap2obj(m: pandoc.MetaMap): Promise<{}> {
+  const result = {}
+  for (const [k, v] of Object.entries(m)) {
+    result[k] = await meta2val(v)
+  }
+  return result
+}
+
+async function meta2obj(
+  varName: string,
+  meta: pandoc.Meta | undefined,
+): Promise<{}> {
+  if (meta === undefined) return {}
+  const e = meta[varName]
+  if (e === undefined) return {}
+  if (e.t !== 'MetaMap') {
+    throw new Error(`${varName} should be MetaMap, but got ${e.t}`)
+  }
+  return metaMap2obj(e.c)
+}
+
+async function tex2svg(
+  mn: string,
+  inline: boolean,
+  meta: pandoc.Meta | undefined,
+): Promise<{ svg: string }> {
+  const opts = Object.assign(
+    {
+      math: mn,
+      format: inline ? 'inline-TeX' : 'TeX',
+      svg: true,
+      speakText: false,
+      linebreaks: false,
+      state: mjState,
+    },
+    await meta2obj('mathjax.typeset', meta),
+  )
+  return mjAPI.typeset(opts)
 }
 
 function wrap(meta: pandoc.Meta | undefined, s: pandoc.Inline) {
@@ -46,10 +85,15 @@ const action: pandoc.FilterAction = async function(
   _format: string,
   meta?: pandoc.Meta,
 ) {
+  if (!mjInitialized) {
+    mjAPI.config(await meta2obj('mathjax', meta))
+    mjAPI.start()
+    mjInitialized = true
+  }
   if (elt.t === 'Math') {
-    const inline = elt.c[0].t != 'DisplayMath'
-    const tex = elt.c[1]
-    const svg = await tex2svg(tex, inline)
+    const [mathT, tex] = elt.c
+    const inline = mathT.t != 'DisplayMath'
+    const { svg } = await tex2svg(tex, inline, meta)
     if (!getConfigOption(meta, 'noInlineSVG')) {
       const svgel = pandoc.RawInline('html', svg)
       return inline ? svgel : wrap(meta, svgel)

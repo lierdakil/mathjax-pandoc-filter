@@ -29,9 +29,9 @@
     "pandoc-filter-promisified": "^0.1.0"
   },
   "devDependencies": {
-    "@types/node": "^10.3.4",
+    "@types/node": "^10.12.18",
     "prettier": "latest",
-    "typescript": "~2.9"
+    "typescript": "~3.2"
   },
   "bin": {
     "mathjax-pandoc-filter": "filter-shim.js"

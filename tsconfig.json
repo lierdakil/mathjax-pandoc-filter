@@ -1,43 +1,35 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "isolatedModules": false,
-        "jsx": "react",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "declaration": false,
-        "noImplicitAny": true,
-        "noImplicitUseStrict": false,
-        "removeComments": true,
-        "noLib": false,
-        "jsxFactory": "etch.dom",
-        "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "inlineSources": true,
-        "inlineSourceMap": true,
-        "strictNullChecks": true,
-        "allowJs": false,
-        "lib":["dom", "es2017"],
-        "strict": true,
-        "importHelpers": false,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "outDir": "lib",
-        "typeRoots" : [
-          "./typings",
-          "./node_modules/@types"
-        ]
-    },
-    "exclude": [
-        "node_modules",
-        "spec"
-    ],
-    "include": [
-        "src/*.ts"
-    ],
-    "compileOnSave": true
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": false,
+    "noImplicitAny": true,
+    "noImplicitUseStrict": false,
+    "removeComments": true,
+    "noLib": false,
+    "jsxFactory": "etch.dom",
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "inlineSources": true,
+    "inlineSourceMap": true,
+    "strictNullChecks": true,
+    "allowJs": false,
+    "lib": ["dom", "es2017"],
+    "strict": true,
+    "importHelpers": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "lib",
+    "typeRoots": ["./typings", "./node_modules/@types"]
+  },
+  "exclude": ["node_modules", "spec"],
+  "include": ["src/*.ts"],
+  "compileOnSave": true
 }

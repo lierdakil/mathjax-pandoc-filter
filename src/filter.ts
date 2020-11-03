@@ -1,9 +1,9 @@
-import * as pandoc from 'pandoc-filter-promisified'
+import * as pandoc from 'pandoc-filter'
 const mjAPI: any = require('mathjax-node')
 const mjState = {}
 let mjInitialized = false
 
-async function meta2val(v: pandoc.MetaValue): Promise<{}> {
+async function meta2val(v: pandoc.PandocMetaValue): Promise<{}> {
   switch (v.t) {
     case 'MetaMap':
       return metaMap2obj(v.c)
@@ -20,7 +20,7 @@ async function meta2val(v: pandoc.MetaValue): Promise<{}> {
   }
 }
 
-async function metaMap2obj(m: pandoc.MetaMap): Promise<{}> {
+async function metaMap2obj(m: pandoc.PandocMetaMap): Promise<{}> {
   const result = {}
   for (const [k, v] of Object.entries(m)) {
     result[k] = await meta2val(v)
@@ -30,7 +30,7 @@ async function metaMap2obj(m: pandoc.MetaMap): Promise<{}> {
 
 async function meta2obj(
   varName: string,
-  meta: pandoc.Meta | undefined,
+  meta: pandoc.PandocMetaMap | undefined,
 ): Promise<{}> {
   if (meta === undefined) return {}
   const e = meta[varName]
@@ -44,7 +44,7 @@ async function meta2obj(
 async function tex2svg(
   mn: string,
   inline: boolean,
-  meta: pandoc.Meta | undefined,
+  meta: pandoc.PandocMetaMap | undefined,
 ): Promise<{ svg: string }> {
   const opts = Object.assign(
     {
@@ -60,7 +60,7 @@ async function tex2svg(
   return mjAPI.typeset(opts)
 }
 
-function wrap(meta: pandoc.Meta | undefined, s: pandoc.Inline) {
+function wrap(meta: pandoc.PandocMetaMap | undefined, s: pandoc.Inline) {
   return [
     pandoc.RawInline(
       'html',
@@ -73,17 +73,20 @@ function wrap(meta: pandoc.Meta | undefined, s: pandoc.Inline) {
   ]
 }
 
-function getConfigOption(meta: pandoc.Meta | undefined, optionName: string) {
+function getConfigOption(
+  meta: pandoc.PandocMetaMap | undefined,
+  optionName: string,
+) {
   if (!meta) return undefined
   const opt = meta[`mathjax.${optionName}`]
   if (!opt) return undefined
   return opt.c
 }
 
-const action: pandoc.FilterAction = async function(
+const action: pandoc.SingleFilterActionAsync = async function(
   elt,
   _format: string,
-  meta?: pandoc.Meta,
+  meta?: pandoc.PandocMetaMap,
 ) {
   if (!mjInitialized) {
     mjAPI.config(await meta2obj('mathjax', meta))

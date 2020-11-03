@@ -1,3 +1,7 @@
+## 0.4.1
+
+-   Move over to pandoc-filter
+
 ## 0.3.1
 
 -   Remove missing bin
